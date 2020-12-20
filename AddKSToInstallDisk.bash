@@ -13,17 +13,15 @@
 . ./colorsforotherfiles.bash
 
 # The file below will add needed information to the grub.cfg file
-. ./GrubFileModify.bash
-exit 
 
 roMount="/media/dvdRO"
 rwMount="/media/dvdRW"
 # you should modify grub.cfg file is you are using SecureBoot under MS Hyper-V
-kstocfg="/EFI/BOOT/grub.cfg"
+#kstocfg="/EFI/BOOT/grub.cfg"
 #kstocfg="isolinux/isolinux.cfg"
-addks="ks=cdrom:/ks.cfg"
+#addks="ks=cdrom:/ks.cfg"
 #Name from file /media/dvdRW/isolinux/isolinux.cfg is CentOS-8-2-2004-x86_64-dvd string begins with append initrd=
-NameForISO="CentOS-8-3-2011-x86_64-dvd"
+#NameForISO="CentOS-8-3-2011-x86_64-dvd"
 MyIPAddr=$(ifconfig | grep 192.168.55 | awk '{print $2}')
 
 if [[ "$EUID" -ne 0 ]]; then
@@ -87,10 +85,11 @@ cp /root/anaconda-ks.cfg $rwMount/ks.cfg
 	fi
 }
 #The line below can be commented to the debug purpose
-#MediaMountAndCopyFiles
-echo 999
+MediaMountAndCopyFiles
+#echo 999
+# The file below will add needed information to the grub.cfg file
 . ./GrubFileModify.bash
-exit
+#echo isoname=$ISONAME
 
 
 
@@ -101,7 +100,7 @@ exit
 #echo -e ${yellow}       initrdefi /images/pxeboot/initrd.img
 #echo -e \}${NC}
 
-read a
+#read a
 #sed -i 's/dvd quiet/dvd quiet ks=cdrom\:\/ks.cfg/' $rwMount/$kstocfg
 #sed -i 's/dvd quiet/dvd quiet ks=cdrom\:\/ks.cfg/' $rwMount/EFI/BOOT/BOOT.conf
 cd $rwMount/
@@ -111,5 +110,5 @@ genisoimage -U -r -v -T -J -joliet-long -V $NameForISO -volset $NameForISO -A $N
 #mkisofs -J -T -o /root/$NameForISO -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -R -m TRANS.TBL -graft-points -V $NameForISO /root/CentOS-install/
 echo -e "Injecting MD5 sum to the ISO"
 implantisomd5 /media/$NameForISO.iso
-echo -e ${yellow}You may run command ${green}scp alex@:${MyIPAddr}/media/${NameForISO} M:\\ISOFiles\\LinuxBSD-ISO\\ ${yellow}from your windows computer.${NC}
+echo -e ${yellow}You may run command ${green}scp alex@${MyIPAddr}:/media/${NameForISO}.iso M:\\ISOFiles\\LinuxBSD-ISO\\ ${yellow}from your windows computer.${NC}
 
