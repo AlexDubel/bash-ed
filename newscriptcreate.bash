@@ -18,5 +18,5 @@ echo ". ./colorsforotherfiles.bash" >> ./$filename".bash"
 echo >> ./$filename".bash"
 chmod a+x ./$filename".bash"
 if [ $? -eq 0 ]; then 
-	echo -e ${green} "File wil data was created succesfully"${NC}
+	echo -e ${green} "File ${filename} was created succesfully"${NC}
 fi
