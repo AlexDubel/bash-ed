@@ -12,7 +12,7 @@
 FILETOMODIFY="/media/dvdRW/EFI/BOOT/grub.cfg"
 #OLDTEXT="Install CentOS Linux 8"
 #NEWTEXT="Install CentOS Linux 8.3 with file with answers"
-FILETOMODIFY1="/home/alex/myscripts/bash-ed/grub.cfg.copy1"
+FILETOMODIFY1="/media/dvdRW/EFI/BOOT/grub.cfg1"
 
 echo -e ${lred}===Starting script that will add lines to the grub file===${NC}
 #chmod a+w ${FILETOMODIFY}
@@ -60,4 +60,7 @@ printf LL="$LL"
 #echo STRNUMBER=$STRNUMBER
 
 (cat $FILETOMODIFY | awk -v LL="$LL" "NR==${STRNUMBER}{print LL}1") > $FILETOMODIFY1
+cat ${FILETOMODIFY1} > ${FILETOMODIFY}
+rm -f ${FILETOMODIFY1}
+NameForISO=$(cat $FILETOMODIFY | grep '^search --no-floppy' | awk -F\' '{print $2}')
 echo -e ${lred}===End file===${NC}
