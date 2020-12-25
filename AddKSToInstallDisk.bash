@@ -7,17 +7,14 @@
 # First version of script was areated for 8.2 version of CentOS
 
 # Modified at: 	Sun Dec 20 10:25:23 EET 2020
-# Changed to 8.3 CentOS disk
+# All modification to the file are described via -m key during git commit. 
 
-# The string below will add color output to your messages if needed
 #. ./colorsforthefiles.bash
 #source $(pwd)/myscripts/bash-ed/colorsforthefiles.bash
 DIRTOINCLUDE="${BASH_SOURCE%/*}"
 if [[ ! -d "$DIRTOINCLUDE" ]]; then DIRTOINCLUDE="$PWD"; fi
-#. "$DIR/incl.sh"
-#. "$DIR/main.sh"
+# The string below will add color output to your messages if needed
 . "$DIRTOINCLUDE/colorsforthefiles.bash"
-# The file below will add needed information to the grub.cfg file
 
 roMount="/media/dvdRO"
 rwMount="/media/dvdRW"
@@ -27,7 +24,6 @@ rwMount="/media/dvdRW"
 #addks="ks=cdrom:/ks.cfg"
 #Name from file /media/dvdRW/isolinux/isolinux.cfg is CentOS-8-2-2004-x86_64-dvd string begins with append initrd=
 #NameForISO="CentOS-8-3-2011-x86_64-dvd"
-MyIPAddr=$(ifconfig | grep 192.168.55 | awk '{print $2}')
 
 if [[ "$EUID" -ne 0 ]]; then
 echo -e ${red}"That script should be run as root"
@@ -93,7 +89,8 @@ cp /root/anaconda-ks.cfg $rwMount/ks.cfg
 MediaMountAndCopyFiles
 #echo 999
 # The file below will add needed information to the grub.cfg file
-. ./GrubFileModify.bash
+#. "$DIRTOINCLUDE/colorsforthefiles.bash"
+. "$DIRTOINCLUDE/GrubFileModify.bash"
 #echo isoname=$ISONAME
 
 
@@ -108,12 +105,13 @@ MediaMountAndCopyFiles
 #read a
 #sed -i 's/dvd quiet/dvd quiet ks=cdrom\:\/ks.cfg/' $rwMount/$kstocfg
 #sed -i 's/dvd quiet/dvd quiet ks=cdrom\:\/ks.cfg/' $rwMount/EFI/BOOT/BOOT.conf
-cd $rwMount/
-echo -e "Writing ISO file"${NC}
+cd $rwMount/ || { echo -e ${red}"Can't cd to $rwMount catalog"${NC}; exit 104; }
+echo -e ${cyan}"Writing ISO file"${NC}
 sleep 2
 genisoimage -U -r -v -T -J -joliet-long -V $NameForISO -volset $NameForISO -A $NameForISO -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e images/efiboot.img -no-emul-boot -o ../$NameForISO.iso .  
 #mkisofs -J -T -o /root/$NameForISO -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -R -m TRANS.TBL -graft-points -V $NameForISO /root/CentOS-install/
 echo -e "Injecting MD5 sum to the ISO"
 implantisomd5 /media/$NameForISO.iso
+MyIPAddr=$(ifconfig | grep 192.168.55 | awk '{print $2}')
 echo -e ${yellow}You may run command ${green}scp alex@${MyIPAddr}:/media/${NameForISO}.iso M:\\ISOFiles\\LinuxBSD-ISO\\ ${yellow}from your windows computer.${NC}
 
