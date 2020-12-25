@@ -3,7 +3,7 @@
 # Created: 28-Nov-2020
 # Modified:
 
-. ./colorsforotherfiles.bash
+. ./colorsforthefiles.bash
 catalog1="/etc"
 backupname="/tmp/backup.tar"
 

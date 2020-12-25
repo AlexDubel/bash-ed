@@ -5,7 +5,7 @@
 # Modified at: 	Sun Dec 20 10:25:23 EET 2020
 
 # The string below will add color output to your messages if needed
-. ./colorsforotherfiles.bash
+. ./colorsforthefiles.bash
 
 
 #FILETOMODIFY="/home/alex/myscripts/bash-ed/grub.cfg.copy"

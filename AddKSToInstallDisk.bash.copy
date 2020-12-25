@@ -10,13 +10,8 @@
 # Changed to 8.3 CentOS disk
 
 # The string below will add color output to your messages if needed
-#. ./colorsforthefiles.bash
-#source $(pwd)/myscripts/bash-ed/colorsforthefiles.bash
-DIRTOINCLUDE="${BASH_SOURCE%/*}"
-if [[ ! -d "$DIRTOINCLUDE" ]]; then DIRTOINCLUDE="$PWD"; fi
-#. "$DIR/incl.sh"
-#. "$DIR/main.sh"
-. "$DIRTOINCLUDE/colorsforthefiles.bash"
+. ./colorsforthefiles.bash
+
 # The file below will add needed information to the grub.cfg file
 
 roMount="/media/dvdRO"

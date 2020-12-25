@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ./colorsforotherfiles.bash
+. ./colorsforthefiles.bash
 #echo red is $red
 #echo -e "That text is in ${red}red${NC}"
 echo -e ${yellow}"That script is a template to create other scripts"
@@ -14,7 +14,7 @@ echo "# Script created by: Oleksandr Dubel" >> ./$filename".bash"
 echo "# Created at: $(date)" >> ./$filename".bash"
 echo "# Modified at:" >> ./$filename".bash"
 echo "# The string below will add color output to your messages if needed" >> ./$filename".bash"
-echo ". ./colorsforotherfiles.bash" >> ./$filename".bash"
+echo ". ./colorsforthefiles.bash" >> ./$filename".bash"
 echo >> ./$filename".bash"
 chmod a+x ./$filename".bash"
 if [ $? -eq 0 ]; then 

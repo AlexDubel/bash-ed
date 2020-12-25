@@ -4,7 +4,7 @@
 # Created at: Tue Dec  1 22:09:25 EET 2020
 # Modified at:
 # The string below will add color output to your messages if needed
-. ./colorsforotherfiles.bash
+. ./colorsforthefiles.bash
 echo "To switch to English in output for e.g. echo date you need to put LANG=LC."
 echo "See example below"
 echo "date before LANG=LC"

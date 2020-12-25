@@ -4,7 +4,7 @@
 # Created at: Вт дек  1 13:29:32 EET 2020
 # Modified at:
 # The string below will add color output to your messages if needed
-. ./colorsforotherfiles.bash
+. ./colorsforthefiles.bash
 
 df -h | tail -n+2 | egrep -v "tmpfs|devtmpfs|sr0" | awk '{print $1, $5}' | while read myvar
 do
