@@ -111,7 +111,7 @@ sleep 2
 genisoimage -U -r -v -T -J -joliet-long -V $NameForISO -volset $NameForISO -A $NameForISO -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e images/efiboot.img -no-emul-boot -o ../$NameForISO.iso .  
 #mkisofs -J -T -o /root/$NameForISO -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -R -m TRANS.TBL -graft-points -V $NameForISO /root/CentOS-install/
 echo -e "Injecting MD5 sum to the ISO"
-implantisomd5 /media/$NameForISO.iso
+implantisomd5 /media/$NameForISO.iso 
 MyIPAddr=$(ifconfig | grep 192.168.55 | awk '{print $2}')
 echo -e ${yellow}You may run command ${green}scp alex@${MyIPAddr}:/media/${NameForISO}.iso M:\\ISOFiles\\LinuxBSD-ISO\\ ${yellow}from your windows computer.${NC}
 
