@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-# That script will add submenu with config file (ks.cfg) to DVD installation  
+# That script will add submenu with config file (ks.cfg) to iso with CENTOS 8.3 installation  
 # Script created by: Oleksandr Dubel
 
 # Created at: 	Wed Dec  2 15:41:44 EET 2020
@@ -16,8 +16,9 @@ if [[ ! -d "$DIRTOINCLUDE" ]]; then DIRTOINCLUDE="$PWD"; fi
 # The string below will add color output to your messages if needed
 . "$DIRTOINCLUDE/colorsforthefiles.bash"
 
-roMount="/media/dvdRO"
-rwMount="/media/dvdRW"
+readonly media="/media"
+readonly roMount="${media}/dvdRO"
+readonly rwMount="${media}/dvdRW"
 # you should modify grub.cfg file is you are using SecureBoot under MS Hyper-V
 #kstocfg="/EFI/BOOT/grub.cfg"
 #kstocfg="isolinux/isolinux.cfg"
@@ -30,10 +31,13 @@ echo -e ${red}"That script should be run as root"
 echo -e Exiting...${NC}
 exit 1
 fi
+
 MediaMountAndCopyFiles ()
 # Cleaning up; Removing calatogs if exist
 	{
-	rm -Rf /media/*
+	umount $roMount
+	rm -rf "${media:?}/"*
+	#rm -Rf /media/*
 	for catalog in $roMount $rwMount
 	do
 	# Creating catalog if it is not exist
@@ -76,7 +80,7 @@ MediaMountAndCopyFiles ()
 echo -e ${cyan}Copying file from /root/anaconda-ks.cfg to $rwMount/ks.cfg
 cp /root/anaconda-ks.cfg $rwMount/ks.cfg
 	if [ $? -eq 0 ];then
-		echo -e ${green}File copied successfully${NC}
+		echo -e ${green}"File copied successfully"${NC}
 		echo -e ${cyan}Unmounting $roMount${NC}
 		umount $roMount
 	else
@@ -87,31 +91,39 @@ cp /root/anaconda-ks.cfg $rwMount/ks.cfg
 }
 #The line below can be commented to the debug purpose
 MediaMountAndCopyFiles
+
 #echo 999
 # The file below will add needed information to the grub.cfg file
 #. "$DIRTOINCLUDE/colorsforthefiles.bash"
+# shellcheck source=/home/alex/myscripts/bash-ed/GrubFileModify.bash
 . "$DIRTOINCLUDE/GrubFileModify.bash"
 #echo isoname=$ISONAME
 
 
 
-#echo -e ${cyan}"Adding info about ks.kfg to the boot menu ks=cdrom:/ks.cfg"
-#echo -e ${red} Please manually add lines below to the $rwMount/$kstocfg file${NC}
-#echo -e ${yellow}menuentry \'Install CentOS Linux 8.3-Custom with answers file\' --class fedora --class gnu-linux --class gnu --class os \{
-#echo -e ${yellow}       linuxefi /images/pxeboot/vmlinuz inst.stage2=hd:LABEL=CentOS-8-3-2011-x86_64-dvd quiet ks=cdrom:/ks.cfg
-#echo -e ${yellow}       initrdefi /images/pxeboot/initrd.img
-#echo -e \}${NC}
-
-#read a
 #sed -i 's/dvd quiet/dvd quiet ks=cdrom\:\/ks.cfg/' $rwMount/$kstocfg
 #sed -i 's/dvd quiet/dvd quiet ks=cdrom\:\/ks.cfg/' $rwMount/EFI/BOOT/BOOT.conf
 cd $rwMount/ || { echo -e ${red}"Can't cd to $rwMount catalog"${NC}; exit 104; }
 echo -e ${cyan}"Writing ISO file"${NC}
-sleep 2
-genisoimage -U -r -v -T -J -joliet-long -V $NameForISO -volset $NameForISO -A $NameForISO -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e images/efiboot.img -no-emul-boot -o ../$NameForISO.iso .  
+#sleep 2
+genisoimage -U -r -v -T -J\
+        -joliet-long\
+       	-V "$NameForISO"\
+       	-volset "$NameForISO"\
+       	-A "$NameForISO"\
+       	-b isolinux/isolinux.bin\
+       	-c isolinux/boot.cat\
+       	-no-emul-boot\
+       	-boot-load-size 4\
+       	-boot-info-table\
+       	-eltorito-alt-boot\
+       	-e images/efiboot.img\
+       	-no-emul-boot\
+	-quiet\
+       	-o ../$NameForISO.iso .  
 #mkisofs -J -T -o /root/$NameForISO -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -R -m TRANS.TBL -graft-points -V $NameForISO /root/CentOS-install/
 echo -e "Injecting MD5 sum to the ISO"
 implantisomd5 /media/$NameForISO.iso 
 MyIPAddr=$(ifconfig | grep 192.168.55 | awk '{print $2}')
-echo -e ${yellow}You may run command ${green}scp alex@${MyIPAddr}:/media/${NameForISO}.iso M:\\ISOFiles\\LinuxBSD-ISO\\ ${yellow}from your windows computer.${NC}
+echo -e ${yellow}You may run command ${green}scp alex@${MyIPAddr}:/media/${NameForISO}.iso D:\\Hyper-V\\CENTOS-COPY\\  ${yellow}from your windows computer.${NC}
 
