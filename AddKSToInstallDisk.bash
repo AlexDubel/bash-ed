@@ -3,7 +3,6 @@
 # That script will add submenu with config file (ks.cfg) to iso with CENTOS 8.3 installation  
 # Script created by: Oleksandr Dubel
 
-
 # Created at: 	Wed Dec  2 15:41:44 EET 2020
 # First version of script was areated for 8.2 version of CentOS
 
