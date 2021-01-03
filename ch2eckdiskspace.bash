@@ -12,3 +12,4 @@ echo -e ${NC}
 echo -e  ${yellow}"Cool awk command that shows partitions with space usage more than 50%"
 df -h | awk '0+$5 >=50 {print}' | awk '{print "The usage of partition "$6, "is more than", $5}'
 echo -e ${NC}
+
