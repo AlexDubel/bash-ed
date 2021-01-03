@@ -70,19 +70,16 @@ MediaMountAndCopyFiles ()
 	shopt -s dotglob
 	cp -aRf $roMount/* $rwMount
 		if [ $? -eq 0 ];then
-			echo -e ${green}Catalog copied successfully${NC}
-		else 
-			echo -e ${red}Catalog copied with errors.
-			echo -e Exiting...
-			exit 102
-		fi
-
-echo -e ${cyan}Copying file from /root/anaconda-ks.cfg to $rwMount/ks.cfg
-cp /root/anaconda-ks.cfg $rwMount/ks.cfg
-	if [ $? -eq 0 ];then
-		echo -e ${green}"File copied successfully"${NC}
-		echo -e ${cyan}Unmounting $roMount${NC}
-		umount $roMount
+			echo -e ${green}Catalog copied successfully${NC} else 
+			echo -e ${red}Catalog copied with errors.  
+			echo -e Exiting...  
+			exit 102 
+		fi 
+		echo -e ${cyan}Copying file from /root/anaconda-ks.cfg to $rwMount/ks.cfg 
+		cp /root/anaconda-ks.cfg $rwMount/ks.cfg 
+		if [ $? -eq 0 ]; then 
+		echo -e ${green}"File copied successfully"${NC} 
+		echo -e ${cyan}Unmounting $roMount${NC} umount $roMount
 	else
 		echo -e ${red}Something went wrong. File was not copied.
 		echo -e Exiting...
@@ -90,7 +87,7 @@ cp /root/anaconda-ks.cfg $rwMount/ks.cfg
 	fi
 }
 #The line below can be commented to the debug purpose
-MediaMountAndCopyFiles
+#MediaMountAndCopyFiles
 
 #echo 999
 # The file below will add needed information to the grub.cfg file
@@ -126,4 +123,3 @@ echo -e "Injecting MD5 sum to the ISO"
 implantisomd5 /media/$NameForISO.iso 
 MyIPAddr=$(ifconfig | grep 192.168.55 | awk '{print $2}')
 echo -e ${yellow}You may run command ${green}scp alex@${MyIPAddr}:/media/${NameForISO}.iso D:\\Hyper-V\\CENTOS-COPY\\  ${yellow}from your windows computer.${NC}
-
